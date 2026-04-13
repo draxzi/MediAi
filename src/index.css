@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './styles/animations.css';
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
