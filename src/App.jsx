@@ -6,9 +6,10 @@ import InputArea from './components/InputArea.jsx';
 import { queryGemini } from './utils/gemini.js';
 
 const STORAGE_KEY = 'mediai_api_key';
+const ENV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 export default function App() {
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem(STORAGE_KEY) || '');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem(STORAGE_KEY) || ENV_API_KEY);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
