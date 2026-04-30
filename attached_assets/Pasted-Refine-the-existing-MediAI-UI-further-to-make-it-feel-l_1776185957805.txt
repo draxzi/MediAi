@@ -1,0 +1,69 @@
+Refine the existing MediAI UI further to make it feel like a premium startup product. Do not change functionality.
+
+1. SPACING & LAYOUT:
+- Increase whitespace between sections
+- Center everything vertically and horizontally
+- Keep max width limited (600–800px)
+- Add generous padding (24px+)
+- Ensure layout looks balanced on both desktop and mobile
+
+2. TYPOGRAPHY:
+- Use "Inter" or "Poppins"
+- Headings slightly bold, clean and modern
+- Maintain clear hierarchy (title > subtitle > body)
+- Avoid large blocks of text
+
+3. HERO SECTION:
+- Title: "MediAI"
+- Add tagline below:
+  "Your health, understood in seconds."
+- Add a short helper line:
+  "Describe your symptoms and get instant guidance."
+- Keep everything centered and minimal
+
+4. INPUT EXPERIENCE:
+- Add placeholder text:
+  "e.g., fever, headache, sore throat"
+- Rounded input box (border-radius 12px+)
+- On focus → border turns soft green (#6BBF9F)
+- Add smooth transition (0.2–0.3s)
+
+5. BUTTON DESIGN:
+- Primary button: "Analyze Symptoms"
+- Background: #6BBF9F
+- Hover → slightly darker (#5aa88c)
+- Click → slight scale down effect
+- Clean, consistent width
+
+6. OUTPUT CARD (IMPORTANT):
+- Display response inside a clean card with soft shadow
+- Add heading:
+  "🩺 Health Insight"
+- Structure output into:
+  • Possible Causes  
+  • What You Can Do  
+  • ⚠️ When to See a Doctor  
+- Add spacing between sections for readability
+
+7. LOADING STATE:
+- When button is clicked:
+  Show "Analyzing your symptoms..." with subtle animated dots or spinner
+- Prevent empty screen during processing
+
+8. ERROR HANDLING:
+- Replace all technical/API errors with:
+  "⚠️ Currently unable to fetch AI response. Please try again shortly."
+- Ensure UI never breaks or shows raw error text
+
+9. MICRO-INTERACTIONS:
+- Button hover and click animations
+- Input focus highlight
+- Smooth fade-in for output card
+- Keep animations subtle and professional
+
+10. FOOTER:
+- Add small disclaimer at bottom:
+  "MediAI does not replace professional medical advice."
+
+Goal:
+The app should feel calm, minimal, and trustworthy — like a real healthcare startup product, not a student project

@@ -1,129 +1,200 @@
+import { useState } from 'react';
 import MedicineCard from './MedicineCard.jsx';
 import StepsList from './StepsList.jsx';
 import RemedyCard from './RemedyCard.jsx';
 import ImageGrid from './ImageGrid.jsx';
+import { getImagesForQuery } from '../utils/imageMap.js';
 
-function SectionBadge({ icon, label, color }) {
+function SectionHeader({ icon, label, color }) {
   const colorMap = {
-    cyan: { bg: 'rgba(56,189,248,0.1)', border: 'rgba(56,189,248,0.25)', text: '#38bdf8' },
-    green: { bg: 'rgba(16,185,129,0.1)', border: 'rgba(16,185,129,0.25)', text: '#10b981' },
-    purple: { bg: 'rgba(168,85,247,0.1)', border: 'rgba(168,85,247,0.25)', text: '#a855f7' },
-    amber: { bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.25)', text: '#f59e0b' },
-    teal: { bg: 'rgba(20,184,166,0.1)', border: 'rgba(20,184,166,0.25)', text: '#14b8a6' },
-    red: { bg: 'rgba(239,68,68,0.1)', border: 'rgba(239,68,68,0.25)', text: '#ef4444' },
+    green:  { bg: '#EEF7F3', border: '#C8DED5', text: '#2F7F6D' },
+    blue:   { bg: '#EEF4FB', border: '#BDD3EE', text: '#2563A8' },
+    amber:  { bg: '#FDF7EE', border: '#F0DCAA', text: '#8D5A0A' },
+    red:    { bg: '#FEF2F2', border: '#FECACA', text: '#B91C1C' },
+    teal:   { bg: '#F0FAFA', border: '#B2DEDE', text: '#115E59' },
+    purple: { bg: '#F5F0FD', border: '#D9C4F8', text: '#6B21A8' },
   };
-
-  const c = colorMap[color] || colorMap.cyan;
+  const c = colorMap[color] || colorMap.green;
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        marginBottom: '14px',
+      }}
+    >
       <span
         style={{
-          padding: '4px 12px',
-          borderRadius: '999px',
+          width: '30px',
+          height: '30px',
+          borderRadius: '8px',
           background: c.bg,
-          border: `1px solid ${c.border}`,
-          color: c.text,
-          fontSize: '12px',
-          fontWeight: 600,
-          fontFamily: "'DM Sans', sans-serif",
-          letterSpacing: '0.04em',
+          border: `1.5px solid ${c.border}`,
           display: 'flex',
           alignItems: 'center',
-          gap: '5px',
+          justifyContent: 'center',
+          fontSize: '14px',
+          flexShrink: 0,
         }}
       >
-        {icon} {label}
+        {icon}
       </span>
+      <h3
+        style={{
+          color: c.text,
+          fontSize: '11px',
+          fontWeight: 700,
+          fontFamily: "'Inter', sans-serif",
+          letterSpacing: '0.07em',
+          textTransform: 'uppercase',
+          margin: 0,
+        }}
+      >
+        {label}
+      </h3>
     </div>
   );
 }
 
-function Section({ children, style }) {
+function Section({ children, noBorder }) {
   return (
-    <div className="animate-fade-in" style={{ marginBottom: '20px', ...style }}>
+    <div
+      className="animate-card-in"
+      style={{
+        paddingBottom: noBorder ? 0 : '20px',
+        marginBottom: noBorder ? 0 : '20px',
+        borderBottom: noBorder ? 'none' : '1px solid #F0EBE3',
+      }}
+    >
       {children}
     </div>
   );
 }
 
-export default function AIResponse({ data, query }) {
+function ImageSection({ query }) {
+  const [hidden, setHidden] = useState(false);
+  if (hidden) return null;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      {data.summary && (
-        <Section>
-          <SectionBadge icon="🔍" label="Assessment" color="cyan" />
-          <p style={{ color: '#cbd5e1', fontSize: '14px', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.7, margin: 0 }}>
-            {data.summary}
-          </p>
-        </Section>
-      )}
+    <Section>
+      <SectionHeader icon="🖼" label="Related Visuals" color="teal" />
+      <ImageGrid query={query} onAllFailed={() => setHidden(true)} />
+    </Section>
+  );
+}
 
-      {data.medicines && data.medicines.length > 0 && (
-        <Section>
-          <SectionBadge icon="💊" label="Suggested Medicines" color="green" />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-              gap: '10px',
-            }}
-          >
-            {data.medicines.map((med, i) => (
-              <MedicineCard key={i} medicine={med} />
-            ))}
-          </div>
-        </Section>
-      )}
+export default function AIResponse({ data, query }) {
+  const sections = [];
 
-      {data.steps && data.steps.length > 0 && (
-        <Section>
-          <SectionBadge icon="📋" label="Steps to Follow" color="purple" />
-          <StepsList steps={data.steps} />
-        </Section>
-      )}
+  if (data.summary) {
+    sections.push(
+      <Section key="summary">
+        <SectionHeader icon="🔍" label="Possible Causes" color="blue" />
+        <p
+          style={{
+            color: '#3E4E4A',
+            fontSize: '14px',
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: 1.8,
+            margin: 0,
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
+          {data.summary}
+        </p>
+      </Section>
+    );
+  }
 
-      {data.remedies && data.remedies.length > 0 && (
-        <Section>
-          <SectionBadge icon="🌿" label="Home Remedies" color="amber" />
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-              gap: '10px',
-            }}
-          >
-            {data.remedies.map((rem, i) => (
-              <RemedyCard key={i} remedy={rem} />
-            ))}
-          </div>
-        </Section>
-      )}
+  if (data.steps && data.steps.length > 0) {
+    sections.push(
+      <Section key="steps">
+        <SectionHeader icon="✅" label="What You Can Do" color="green" />
+        <StepsList steps={data.steps} />
+      </Section>
+    );
+  }
 
-      {query && (
-        <Section>
-          <SectionBadge icon="🖼" label="Related Visuals" color="teal" />
-          <ImageGrid query={query} />
-        </Section>
-      )}
+  if (data.medicines && data.medicines.length > 0) {
+    sections.push(
+      <Section key="medicines">
+        <SectionHeader icon="💊" label="Suggested Medicines" color="purple" />
+        <div className="medicine-grid">
+          {data.medicines.map((med, i) => <MedicineCard key={i} medicine={med} />)}
+        </div>
+      </Section>
+    );
+  }
 
-      {data.warning && (
-        <Section style={{ marginBottom: 0 }}>
-          <SectionBadge icon="⚠" label="Important" color="red" />
-          <div
-            style={{
-              padding: '14px 16px',
-              borderRadius: '12px',
-              background: 'rgba(239,68,68,0.08)',
-              border: '1px solid rgba(239,68,68,0.25)',
-            }}
-          >
-            <p style={{ color: '#fca5a5', fontSize: '13px', fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6, margin: 0 }}>
+  if (data.remedies && data.remedies.length > 0) {
+    sections.push(
+      <Section key="remedies">
+        <SectionHeader icon="🌿" label="Home Remedies" color="amber" />
+        <div className="remedy-grid">
+          {data.remedies.map((rem, i) => <RemedyCard key={i} remedy={rem} />)}
+        </div>
+      </Section>
+    );
+  }
+
+  const imageSearchQuery = data.imageQuery || query;
+  if (imageSearchQuery && getImagesForQuery(imageSearchQuery).length > 0) {
+    sections.push(<ImageSection key="images" query={imageSearchQuery} />);
+  }
+
+  if (data.warning) {
+    sections.push(
+      <Section key="warning" noBorder>
+        <div
+          style={{
+            padding: '14px 16px',
+            borderRadius: '12px',
+            background: '#FEF2F2',
+            border: '1.5px solid #FECACA',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '10px',
+          }}
+        >
+          <span style={{ fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>⚠️</span>
+          <div style={{ minWidth: 0 }}>
+            <p
+              style={{
+                color: '#7F1D1D',
+                fontSize: '11px',
+                fontWeight: 700,
+                fontFamily: "'Inter', sans-serif",
+                margin: '0 0 5px 0',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+              }}
+            >
+              When to See a Doctor
+            </p>
+            <p
+              style={{
+                color: '#991B1B',
+                fontSize: '13px',
+                fontFamily: "'Inter', sans-serif",
+                lineHeight: 1.65,
+                margin: 0,
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
               {data.warning}
             </p>
           </div>
-        </Section>
-      )}
+        </div>
+      </Section>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {sections}
     </div>
   );
 }

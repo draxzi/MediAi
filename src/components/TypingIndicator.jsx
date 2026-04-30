@@ -1,63 +1,96 @@
 export default function TypingIndicator() {
-  const dots = [
-    { color: '#38bdf8', delay: '0s' },
-    { color: '#a855f7', delay: '0.2s' },
-    { color: '#14b8a6', delay: '0.4s' },
-  ];
-
   return (
     <div
       className="animate-msg-in"
       style={{
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
         gap: '12px',
-        padding: '0 16px 0 0',
         alignSelf: 'flex-start',
-        maxWidth: '120px',
       }}
     >
       <div
         style={{
-          width: '32px',
-          height: '32px',
+          width: '34px',
+          height: '34px',
           borderRadius: '50%',
-          background: 'rgba(56,189,248,0.15)',
-          border: '1px solid rgba(56,189,248,0.3)',
+          background: 'linear-gradient(135deg, #6BBF9F, #2F7F6D)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '16px',
           flexShrink: 0,
+          boxShadow: '0 2px 8px rgba(107,191,159,0.30)',
         }}
       >
-        🩺
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
+
       <div
         style={{
-          padding: '14px 18px',
+          background: '#FFFFFF',
+          border: '1.5px solid #E8E3DC',
           borderRadius: '18px 18px 18px 4px',
-          background: 'rgba(18, 24, 40, 0.9)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
+          overflow: 'hidden',
         }}
       >
-        {dots.map((dot, i) => (
+        <div
+          style={{
+            padding: '10px 16px 8px',
+            borderBottom: '1px solid #F0EBE3',
+            background: '#FAFAF8',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '7px',
+          }}
+        >
+          <span style={{ fontSize: '13px' }}>🩺</span>
           <span
-            key={i}
             style={{
-              display: 'inline-block',
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              background: dot.color,
-              animation: `typingBounce 1.2s ease-in-out infinite`,
-              animationDelay: dot.delay,
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '12px',
+              fontWeight: 600,
+              color: '#2F7F6D',
             }}
-          />
-        ))}
+          >
+            Health Insight
+          </span>
+        </div>
+        <div
+          style={{
+            padding: '14px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '13px',
+              color: '#8FA89E',
+              fontFamily: "'Inter', sans-serif",
+              marginRight: '6px',
+            }}
+          >
+            Analyzing your symptoms
+          </span>
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              style={{
+                display: 'inline-block',
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#6BBF9F',
+                animation: 'typingBounce 1.2s ease-in-out infinite',
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

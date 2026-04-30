@@ -3,44 +3,42 @@ import MessageBubble from './MessageBubble.jsx';
 import WelcomeScreen from './WelcomeScreen.jsx';
 import TypingIndicator from './TypingIndicator.jsx';
 
-export default function ChatArea({ messages, isProcessing, onChipClick }) {
+export default function ChatArea({
+  messages, isProcessing, onChipFill, onFollowUpComplete,
+  onSaveInsight, lastSession, onResumeSession,
+}) {
   const bottomRef = useRef(null);
   const [welcomeLeaving, setWelcomeLeaving] = useState(false);
   const hasMessages = messages.length > 0;
 
   useEffect(() => {
-    if (hasMessages && !welcomeLeaving) {
-      setWelcomeLeaving(true);
-    }
+    if (hasMessages && !welcomeLeaving) setWelcomeLeaving(true);
   }, [hasMessages]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isProcessing]);
 
-  function handleChipClick(label) {
-    setWelcomeLeaving(true);
-    setTimeout(() => onChipClick(label), 200);
-  }
-
   return (
     <div
       style={{
         flex: 1,
         overflowY: 'auto',
-        paddingTop: '80px',
-        paddingBottom: '130px',
+        overflowX: 'hidden',
+        /* CSS variables defined in index.css, overridden per breakpoint/orientation */
+        paddingTop: 'calc(var(--hh) + 12px)',
+        paddingBottom: 'calc(var(--ih) + 10px)',
         display: 'flex',
         flexDirection: 'column',
+        background: '#F7F5F2',
+        /* smooth momentum scrolling on iOS */
+        WebkitOverflowScrolling: 'touch',
       }}
     >
       <div
+        className="content-container"
         style={{
           flex: 1,
-          maxWidth: '900px',
-          width: '100%',
-          margin: '0 auto',
-          padding: '0 20px',
           display: 'flex',
           flexDirection: 'column',
           gap: '20px',
@@ -48,13 +46,24 @@ export default function ChatArea({ messages, isProcessing, onChipClick }) {
       >
         {!hasMessages && (
           <WelcomeScreen
-            onChipClick={handleChipClick}
+            onChipFill={onChipFill}
             isLeaving={welcomeLeaving}
+            lastSession={lastSession}
+            onResume={onResumeSession}
           />
         )}
 
         {messages.map((msg, i) => (
-          <MessageBubble key={i} message={msg} />
+          <MessageBubble
+            key={i}
+            message={msg}
+            onFollowUpComplete={
+              msg.isFollowUp && i === messages.length - 1
+                ? onFollowUpComplete
+                : undefined
+            }
+            onSaveInsight={onSaveInsight}
+          />
         ))}
 
         {isProcessing && <TypingIndicator />}

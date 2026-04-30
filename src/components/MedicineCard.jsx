@@ -4,28 +4,52 @@ export default function MedicineCard({ medicine }) {
   return (
     <div
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: '14px',
+        background: '#FAFAF8',
+        border: '1.5px solid #E8E3DC',
+        borderRadius: '12px',
         padding: '16px',
-        transition: 'all 0.2s ease',
+        transition: 'all 0.18s ease',
         cursor: 'default',
+        boxSizing: 'border-box',
+        width: '100%',
+        wordWrap: 'break-word',
+        overflowWrap: 'break-word',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.borderColor = 'rgba(56,189,248,0.4)';
-        e.currentTarget.style.boxShadow = '0 8px 24px rgba(56,189,248,0.1)';
-        e.currentTarget.style.background = 'rgba(56,189,248,0.05)';
+        e.currentTarget.style.borderColor = '#6BBF9F';
+        e.currentTarget.style.boxShadow = '0 6px 18px rgba(107,191,159,0.15)';
+        e.currentTarget.style.background = '#F0FAF6';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+        e.currentTarget.style.borderColor = '#E8E3DC';
         e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+        e.currentTarget.style.background = '#FAFAF8';
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-        <p style={{ color: '#f0f6ff', fontSize: '14px', fontWeight: 600, fontFamily: "'DM Sans', sans-serif", margin: 0, flex: 1, marginRight: '8px' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '8px',
+          gap: '8px',
+        }}
+      >
+        <p
+          style={{
+            color: '#2E2E2E',
+            fontSize: '14px',
+            fontWeight: 600,
+            fontFamily: "'Inter', sans-serif",
+            margin: 0,
+            flex: 1,
+            minWidth: 0,
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
           {medicine.name}
         </p>
         <span
@@ -34,25 +58,57 @@ export default function MedicineCard({ medicine }) {
             borderRadius: '999px',
             fontSize: '10px',
             fontWeight: 600,
-            fontFamily: "'DM Sans', sans-serif",
+            fontFamily: "'Inter', sans-serif",
             letterSpacing: '0.05em',
             whiteSpace: 'nowrap',
-            background: isOTC ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
-            color: isOTC ? '#34d399' : '#fbbf24',
-            border: `1px solid ${isOTC ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)'}`,
+            flexShrink: 0,
+            background: isOTC ? '#EEF7F3' : '#FDF7EE',
+            color: isOTC ? '#2F7F6D' : '#8D5A0A',
+            border: `1px solid ${isOTC ? '#C8DED5' : '#F0DCAA'}`,
           }}
         >
           {medicine.type}
         </span>
       </div>
-      <p style={{ color: '#38bdf8', fontSize: '12px', fontWeight: 500, fontFamily: "'DM Sans', sans-serif", margin: '0 0 6px 0' }}>
+      <p
+        style={{
+          color: '#2F7F6D',
+          fontSize: '12px',
+          fontWeight: 500,
+          fontFamily: "'Inter', sans-serif",
+          margin: '0 0 6px 0',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
+        }}
+      >
         {medicine.dosage}
       </p>
-      <p style={{ color: '#94a3b8', fontSize: '13px', fontFamily: "'DM Sans', sans-serif", margin: '0 0 6px 0', lineHeight: 1.5 }}>
+      <p
+        style={{
+          color: '#7A8B84',
+          fontSize: '13px',
+          fontFamily: "'Inter', sans-serif",
+          margin: '0 0 6px 0',
+          lineHeight: 1.5,
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
+        }}
+      >
         {medicine.use}
       </p>
       {medicine.note && (
-        <p style={{ color: '#64748b', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", fontStyle: 'italic', margin: 0, lineHeight: 1.5 }}>
+        <p
+          style={{
+            color: '#A8B5AE',
+            fontSize: '12px',
+            fontFamily: "'Inter', sans-serif",
+            fontStyle: 'italic',
+            margin: 0,
+            lineHeight: 1.5,
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
           {medicine.note}
         </p>
       )}

@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   CSS LAYOUT VARIABLES
+   Single source of truth for header / input-bar heights.
+   Components read these via calc(var(--hh) ...) in inline styles.
+   ============================================================ */
+:root {
+  --hh: 64px;     /* header height  */
+  --ih: 126px;    /* input bar height (collapsed single-row) */
+}
+
+/* Compact landscape on phones (height ≤ 500px) */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --hh: 50px;
+    --ih: 86px;
+  }
+}
+
+/* ============================================================
+   BASE RESET
+   ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -10,44 +31,221 @@
 
 html, body, #root {
   height: 100%;
-  overflow: hidden;
+  /* do NOT set overflow:hidden here — let .app-layout handle it */
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: #0b0f1a;
-  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  background: #F7F5F2;
+  color: #2E2E2E;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden; /* keep body from scrolling */
 }
 
+/* ============================================================
+   APP LAYOUT
+   Use dynamic viewport height so it shrinks with the keyboard.
+   ============================================================ */
+.app-layout {
+  height: 100vh;       /* fallback */
+  height: 100dvh;      /* shrinks when soft-keyboard appears */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;    /* single scroll container is .chat-area */
+  position: relative;
+  background: #F7F5F2;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.2);
+  background: #C8DED5;
   border-radius: 2px;
 }
+::-webkit-scrollbar-thumb:hover { background: #6BBF9F; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.4);
+/* ============================================================
+   TYPOGRAPHY PLACEHOLDERS
+   ============================================================ */
+textarea::placeholder { color: #A8B5AE; }
+input::placeholder    { color: #A8B5AE; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   CONTENT CONTAINER
+   Centered, max-width, side padding.
+   Safe-area insets applied so content avoids notches in landscape.
+   ============================================================ */
+.content-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+  /* respect iPhone X side notches in landscape */
+  padding-left: max(24px, calc(env(safe-area-inset-left, 0px) + 16px));
+  padding-right: max(24px, calc(env(safe-area-inset-right, 0px) + 16px));
 }
 
-textarea::placeholder {
-  color: #334155;
+@media (max-width: 640px) {
+  .content-container {
+    padding-left: max(16px, calc(env(safe-area-inset-left, 0px) + 12px));
+    padding-right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
+  }
 }
 
-input::placeholder {
-  color: #334155;
+/* ============================================================
+   CARD GRIDS
+   ============================================================ */
+.medicine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.remedy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@media (max-width: 640px) {
+  .medicine-grid { grid-template-columns: 1fr; }
+  .remedy-grid   { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 }
+
+/* ============================================================
+   INPUT FOOTER
+   ============================================================ */
+.input-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 9px;
+  padding: 0 2px;
+  gap: 8px;
+}
+.input-footer-hint {
+  color: #BDB5AB;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  white-space: nowrap;
+}
+.input-footer-disclaimer {
+  color: #C4BCB3;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  text-align: right;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Landscape: hide footer to save vertical space */
+@media (max-height: 500px) and (orientation: landscape) {
+  .input-footer { display: none; }
+}
+
+@media (max-width: 640px) {
+  .input-footer { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .input-footer-hint { display: none; }
+  .input-footer-disclaimer { text-align: left; font-size: 10px; }
+}
+
+/* ============================================================
+   USER BUBBLE ALIGNMENT
+   ============================================================ */
+.user-bubble-wrap {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 60px;
+}
+@media (max-width: 640px) {
+  .user-bubble-wrap { padding-left: 24px; }
+}
+
+/* ============================================================
+   CARD TEXT
+   ============================================================ */
+.card-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ============================================================
+   HEADER RESPONSIVE LABELS
+   On small portrait screens: hide button text labels, keep icons.
+   On landscape phones: same.
+   ============================================================ */
+.hdr-btn-label {
+  display: inline;
+}
+.hdr-ai-label {
+  display: inline;
+}
+
+@media (max-width: 480px) {
+  .hdr-btn-label { display: none; }
+  .hdr-ai-label  { display: none; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .hdr-btn-label { display: none; }
+}
+
+/* ============================================================
+   TOUCH TARGETS  (pointer: coarse = touchscreen)
+   Ensure interactive elements are comfortably tappable.
+   ============================================================ */
+@media (hover: none) and (pointer: coarse) {
+  .hdr-action-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 10px !important;
+  }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes welcomeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-16px); }
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.animate-blink       { animation: blink 2s ease-in-out infinite; }
+.animate-fade-in     { animation: fadeIn 0.4s ease forwards; }
+.animate-welcome-out { animation: welcomeOut 0.3s ease forwards; }
+.animate-msg-in      { animation: msgIn 0.35s ease forwards; }
+.animate-card-in     { animation: cardIn 0.3s ease forwards; }
+.animate-float       { animation: float 3s ease-in-out infinite; }
