@@ -6,5 +6,5 @@
 ## Replit setup
 
 1. Import this repository in Replit using the **Run on Replit** button.
-2. Add `VITE_GEMINI_API_KEY` in Replit **Secrets**.
+2. Add `VITE_GROQ_API_KEY` in Replit **Secrets**.
 3. Run the app from Replit.
