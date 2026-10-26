@@ -3,7 +3,7 @@
 AI-powered health intelligence platform for instant symptom assessment and personalized wellness guidance.
 
 ## Live Demo
-https://askmediai.vercel.app
+https://healthwithmediai.vercel.app
 
 ## Overview
 MediAI is an AI-powered health assistant designed to provide instant symptom analysis, wellness recommendations, medication guidance, and early care insights through an intuitive conversational interface.
